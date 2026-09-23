@@ -26,6 +26,10 @@ export default function App() {
   const [overlay, setOverlay] = useState<'profile' | 'wallet-menu' | 'help' | null>(null)
   const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null)
   const [hideBalance, setHideBalance] = useState(false)
+  useEffect(() => {
+    document.body.classList.toggle('light-mode', theme === 'light')
+    return () => document.body.classList.remove('light-mode')
+  }, [theme])
   const openAsset = (asset: Asset) => { setSelectedAsset(asset); setModal('asset') }
   const openFlow = (flow: 'send' | 'receive' | 'swap' | 'buy') => setModal(flow)
   return <div className={`app-shell ${theme}`}>
