@@ -2,6 +2,7 @@ export type Tab = 'home' | 'wallet' | 'activity' | 'swap' | 'settings'
 export type TransactionType = 'Received' | 'Sent' | 'Swapped' | 'Bought' | 'Sold'
 export type TransactionStatus = 'Completed' | 'Pending' | 'Failed'
 export type PortfolioMode = 'calculated' | 'fixed'
+export type BrandMark = 'spark' | 'shield' | 'hex'
 
 export interface Asset {
   id: string
@@ -30,6 +31,8 @@ export interface WalletTransaction {
 }
 
 export interface WalletState {
+  appName: string
+  brandMark: BrandMark
   walletName: string
   walletAddress: string
   fiat: 'EUR' | 'USD' | 'GBP'

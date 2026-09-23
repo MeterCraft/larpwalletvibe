@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { makeId } from '../lib/generators'
 import { dexieStorage } from '../db/database'
-import type { Asset, TransactionType, WalletState, WalletTransaction } from '../types/wallet'
+import type { Asset, BrandMark, TransactionType, WalletState, WalletTransaction } from '../types/wallet'
 
 const seedAssets: Asset[] = [
   { id: 'btc', name: 'Bitcoin', symbol: 'BTC', balance: 0.1842, price: 64280, change: 2.84, color: '#f7931a', icon: '₿', precision: 6, history: [48, 51, 49, 58, 55, 64, 62, 70, 68, 77] },
@@ -20,12 +20,15 @@ const seedTransactions: WalletTransaction[] = [
 ]
 
 const initialState: Omit<WalletState, 'hydrated'> = {
+  appName: 'LarpWallet', brandMark: 'spark',
   walletName: 'Midnight Relay', walletAddress: 'larp_wallet_4c8a21', fiat: 'EUR', fiatRate: 0.92,
   portfolioMode: 'calculated', fixedPortfolioValue: 24500, assets: seedAssets, transactions: seedTransactions,
 }
 
 interface WalletActions {
   hydrate: () => void
+  setAppName: (appName: string) => void
+  setBrandMark: (brandMark: BrandMark) => void
   setWalletName: (walletName: string) => void
   setFiat: (fiat: WalletState['fiat']) => void
   setPortfolioMode: (mode: WalletState['portfolioMode']) => void
@@ -42,6 +45,8 @@ interface WalletActions {
 export const useWalletStore = create<WalletState & WalletActions>()(persist((set) => ({
   ...initialState, hydrated: false,
   hydrate: () => set({ hydrated: true }),
+  setAppName: (appName) => set({ appName }),
+  setBrandMark: (brandMark) => set({ brandMark }),
   setWalletName: (walletName) => set({ walletName }),
   setFiat: (fiat) => set({ fiat }),
   setPortfolioMode: (portfolioMode) => set({ portfolioMode }),
