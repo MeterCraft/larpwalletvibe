@@ -3,6 +3,7 @@ export type TransactionType = 'Received' | 'Sent' | 'Swapped' | 'Bought' | 'Sold
 export type TransactionStatus = 'Completed' | 'Pending' | 'Failed'
 export type PortfolioMode = 'calculated' | 'fixed'
 export type BrandMark = 'spark' | 'shield' | 'hex'
+export type ThemeMode = 'dark' | 'light'
 
 export interface Asset {
   id: string
@@ -31,6 +32,7 @@ export interface WalletTransaction {
 }
 
 export interface WalletState {
+  theme: ThemeMode
   appName: string
   brandMark: BrandMark
   walletName: string

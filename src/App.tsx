@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import QRCode from 'qrcode'
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts'
-import { ArrowDownLeft, ArrowLeftRight, ArrowUpRight, ChevronRight, CircleHelp, Copy, Eye, EyeOff, GripVertical, History, Home, MoreHorizontal, Plus, RotateCcw, Settings, ShieldCheck, SlidersHorizontal, Sparkles, Trash2, Wallet as WalletIcon, X } from 'lucide-react'
+import { ArrowDownLeft, ArrowLeftRight, ArrowUpRight, ChevronRight, CircleHelp, Copy, Eye, EyeOff, GripVertical, History, Home, Moon, MoreHorizontal, Plus, RotateCcw, Settings, ShieldCheck, SlidersHorizontal, Sparkles, Sun, Trash2, Wallet as WalletIcon, X } from 'lucide-react'
 import { allocation, assetValue, displayedPortfolioValue, formatMoney, formatToken } from './lib/calculations'
 import { fictionalAddress } from './lib/generators'
 import { useWalletStore } from './store/walletStore'
@@ -20,7 +20,7 @@ function BrandGlyph({ mark, size = 16 }: { mark: BrandMark; size?: number }) {
 }
 
 export default function App() {
-  const { appName, brandMark } = useWalletStore()
+  const { appName, brandMark, theme, setTheme } = useWalletStore()
   const [tab, setTab] = useState<Tab>('home')
   const [modal, setModal] = useState<'send' | 'receive' | 'swap' | 'buy' | 'asset' | null>(null)
   const [overlay, setOverlay] = useState<'profile' | 'wallet-menu' | 'help' | null>(null)
@@ -28,9 +28,9 @@ export default function App() {
   const [hideBalance, setHideBalance] = useState(false)
   const openAsset = (asset: Asset) => { setSelectedAsset(asset); setModal('asset') }
   const openFlow = (flow: 'send' | 'receive' | 'swap' | 'buy') => setModal(flow)
-  return <div className="app-shell">
+  return <div className={`app-shell ${theme}`}>
     <aside className="desktop-rail"><div className="brand-mark"><BrandGlyph mark={brandMark} size={16} /><span>{appName}</span></div><p className="rail-label">Workspace</p><nav>{tabs.map(({ id, label, icon: Icon }) => <button className={tab === id ? 'nav-item active' : 'nav-item'} key={id} onClick={() => setTab(id)}><Icon size={18} />{label}</button>)}</nav>{tab !== 'home' && <div className="rail-foot"><div className="mode-pill"><span /> LARP MODE</div><small>Local simulator</small></div>}</aside>
-    <main className="main-column"><header className="topbar"><div className="mobile-brand"><BrandGlyph mark={brandMark} size={16} /><span>{appName}</span></div><div className="topbar-right">{tab !== 'home' && <span className="simulation-tag"><span /> Simulation</span>}<button className="icon-button" onClick={() => setOverlay('help')} aria-label="Open simulator guide"><CircleHelp size={18} /></button><button className="avatar" onClick={() => setOverlay('profile')} aria-label="Open profile">MR</button></div></header><div className="content"><Page tab={tab} onTab={setTab} onFlow={openFlow} onAsset={openAsset} onMenu={() => setOverlay('wallet-menu')} hideBalance={hideBalance} setHideBalance={setHideBalance} /></div></main>
+    <main className="main-column"><header className="topbar"><div className="mobile-brand"><BrandGlyph mark={brandMark} size={16} /><span>{appName}</span></div><div className="topbar-right">{tab !== 'home' && <span className="simulation-tag"><span /> Simulation</span>}<button className="icon-button" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>{theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}</button><button className="icon-button" onClick={() => setOverlay('help')} aria-label="Open simulator guide"><CircleHelp size={18} /></button><button className="avatar" onClick={() => setOverlay('profile')} aria-label="Open profile">MR</button></div></header><div className="content"><Page tab={tab} onTab={setTab} onFlow={openFlow} onAsset={openAsset} onMenu={() => setOverlay('wallet-menu')} hideBalance={hideBalance} setHideBalance={setHideBalance} /></div></main>
     <nav className="bottom-nav">{tabs.map(({ id, label, icon: Icon }) => <button className={tab === id ? 'bottom-item active' : 'bottom-item'} key={id} onClick={() => setTab(id)}><Icon size={20} /><span>{label}</span></button>)}</nav>
     {modal && <Modal type={modal} asset={selectedAsset} onClose={() => { setModal(null); setSelectedAsset(null) }} />}
     {overlay && <UtilityOverlay type={overlay} onClose={() => setOverlay(null)} onProfile={() => setOverlay('profile')} />}
